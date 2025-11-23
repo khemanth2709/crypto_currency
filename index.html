@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Tracker Pro</title>
+
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#1a2a6c" />
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-chart-line"></i> Crypto Tracker Pro</h1>
+            <p>Real-time cryptocurrency dashboard with analytics, portfolio & news</p>
+        </header>
+
+        <!-- Live Ticker -->
+        <div id="ticker" class="ticker">
+            <div class="ticker-inner" id="ticker-inner"></div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="search-container">
+                <div class="search-box">
+                    <input
+                        id="search-input"
+                        type="text"
+                        placeholder="Search for a cryptocurrency..."
+                    />
+                    <button id="search-btn" title="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button id="voice-btn" title="Voice search">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+                <div class="suggestions" id="suggestions"></div>
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" id="all-btn">All Coins</button>
+                <button class="filter-btn" id="favorites-btn">Favorites</button>
+                <button class="filter-btn" id="compare-btn">Compare (2)</button>
+            </div>
+        </div>
+
+        <!-- Portfolio section -->
+        <section id="portfolio-section">
+            <h2>My Portfolio</h2>
+            <div class="portfolio-inputs">
+                <select id="portfolio-coin">
+                    <option value="">Select coin</option>
+                </select>
+                <input
+                    type="number"
+                    id="portfolio-qty"
+                    placeholder="Quantity"
+                    min="0"
+                    step="0.00000001"
+                />
+                <input
+                    type="number"
+                    id="portfolio-buy"
+                    placeholder="Buy price (USD)"
+                    min="0"
+                    step="0.01"
+                />
+                <button id="portfolio-add">Add</button>
+            </div>
+            <div id="portfolio-summary" class="portfolio-summary">
+                No holdings added yet.
+            </div>
+            <div class="portfolio-table-wrapper">
+                <table id="portfolio-table">
+                    <thead>
+                        <tr>
+                            <th>Coin</th>
+                            <th>Qty</th>
+                            <th>Buy Price</th>
+                            <th>Current</th>
+                            <th>P / L</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Loading -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Fetching live market data...</p>
+        </div>
+
+        <!-- Error -->
+        <div id="error-message" class="error" style="display: none;">
+            <h3><i class="fas fa-exclamation-triangle"></i> Unable to load data</h3>
+            <p>Please check your internet connection or try again later.</p>
+            <button id="retry-btn">Retry</button>
+        </div>
+
+        <!-- Crypto cards -->
+        <main class="main-content" id="crypto-container"></main>
+
+        <!-- News section -->
+        <section id="news-section">
+            <h2>Latest Crypto News</h2>
+            <div id="news-container" class="news-container"></div>
+        </section>
+
+        <footer>
+            <p>Crypto Tracker Pro &mdash; Real-time Data Fetching Web Application</p>
+            <p>Developed by Hemanth Kandula | Powered by CoinGecko & CoinStats APIs</p>
+        </footer>
+    </div>
+
+    <!-- Coin modal -->
+    <div class="modal" id="coin-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>
+                    <img id="modal-image" width="28" height="28" alt="Coin logo" />
+                    <span id="modal-name"></span>
+                </h2>
+                <button class="close-btn" id="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-price-row">
+                    <div id="modal-price" class="price"></div>
+                    <div id="modal-change" class="change"></div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="price-chart"></canvas>
+                </div>
+
+                <div class="modal-stats">
+                    <div class="stat-card">
+                        <div>Market Rank</div>
+                        <div class="stat-value" id="modal-rank">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>24h High</div>
+                        <div class="stat-value" id="modal-high">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>24h Low</div>
+                        <div class="stat-value" id="modal-low">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>All-Time High</div>
+                        <div class="stat-value" id="modal-ath">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>All-Time Low</div>
+                        <div class="stat-value" id="modal-atl">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>Market Cap</div>
+                        <div class="stat-value" id="modal-marketcap">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js").catch(console.error);
+        }
+    </script>
+</body>
+</html>
